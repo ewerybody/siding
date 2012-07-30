@@ -122,6 +122,12 @@ class QSingleApplication(QApplication):
 
         QApplication.__init__(self, *args, **kwargs)
 
+        # During shutdown, we can't rely on globals like os being still available.
+        if os.name == "nt":
+            self._close_lock = self._close_mutex
+        else:
+            self._close_lock = self._close_lockfile
+
         # If this is Windows, then _aeroglass is imported already, so hook up
         # to that.
         if _aeroglass:
@@ -132,11 +138,8 @@ class QSingleApplication(QApplication):
         Close the handle of our mutex if we have one, destroy any existing lock
         file, any gracefully close the QLocalServer.
         """
-        if os.name == 'nt':
-            self._close_mutex()
-        else:
-            self._close_lockfile()
 
+        self._close_lock()
         self._close_server()
 
     ##### Event Filtering #####################################################
@@ -235,12 +238,12 @@ class QSingleApplication(QApplication):
 
     ##### Mutex Code ##########################################################
 
-    def _close_mutex(self):
+    def _close_mutex(self, CloseHandle=windll.kernel32.CloseHandle):
         """
         If we have a mutex, try to close it.
         """
         if self._mutex:
-            windll.kernel32.CloseHandle(self._mutex)
+            CloseHandle(self._mutex)
             self._mutex = None
 
     def _create_mutex(self):
@@ -256,13 +259,13 @@ class QSingleApplication(QApplication):
 
     ##### Lockfile Code #######################################################
 
-    def _close_lockfile(self):
+    def _close_lockfile(self, unlink=os.unlink, close=os.close):
         """
         If a lockfile exists, delete it.
         """
         if self._lockfile:
-            os.unlink(self._lockfile)
-            os.close(self._lockfd)
+            unlink(self._lockfile)
+            close(self._lockfd)
             self._lockfile = None
             self._lockfd = None
 
