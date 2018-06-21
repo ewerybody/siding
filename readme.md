@@ -1,15 +1,18 @@
-siding
-======
+singlesiding
+============
 
-siding is a lightweight framework to assist in the creation of PySide
-applications with support for multiple-instance detection, multiple profiles,
-easy to use styles, and a flexible plugins system.
+singlesiding is a stripped down fork of "siding" which was a whole "lightweight
+framework to assist in the creation of PySide applications ..."
+This now is focussed on the QSingleApplication. That makes it possible to have
+standalone PySide/Qt/Python apps that spawn just once and send messages to an
+already running parent app.
 
-siding is available under the
+singlesiding is also available under the
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 Installation
 ------------
+TODO: wip ...
 
 siding isn't finished yet, but you can still download it if you'd like. You
 can use pip:

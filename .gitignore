@@ -4,6 +4,7 @@
 /dist/
 /docs/_build/
 MANIFEST
+.*
 
 # Backup files
 *.sw[po]
