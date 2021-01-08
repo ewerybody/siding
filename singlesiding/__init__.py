@@ -1,8 +1,7 @@
 from singlesiding.singleinstance import QSingleApplication
 
 
-def initialize(organization_name=None, application_name=None, version=None,
-               message=None):
+def initialize(organization_name=None, application_name=None, version=None, message=None):
     """
     If you're feeling particularly lazy, this function will handle all the
     initialization for you and return a :class:`QSingleApplication` instance.
